@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import api from '../api';
-import App from '../App';
-
-import { 
+import {
   Box,
   TextField,
   Button,
@@ -19,7 +17,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { styled } from '@mui/system';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -43,39 +41,35 @@ const Login = () => {
   const { login, error } = useAuth();
   const [er, setError] = useState('');
   const navigate = useNavigate();
-  // const {setUser} = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    // Validate form data
     try {
-
-      const authResponse = await api.post('/o/token/', new URLSearchParams({
-        grant_type: 'password',
-        username: formData.email,
-        password: formData.password,
-        client_id: process.env.REACT_APP_CLIENT_ID,
-        client_secret: process.env.REACT_APP_CLIENT_SECRET
-      }));      
-      // Fetch user details using the access token
-      const userResponse = await api.get('/me/',{
+      const authResponse = await api.post(
+        '/o/token/',
+        new URLSearchParams({
+          grant_type: 'password',
+          username: formData.email,
+          password: formData.password,
+          client_id: process.env.REACT_APP_CLIENT_ID,
+          client_secret: process.env.REACT_APP_CLIENT_SECRET,
+        })
+      );
+      const userResponse = await api.get('/me/', {
         headers: {
           Authorization: `Bearer ${authResponse.data.access_token}`,
         },
       });
-      // Store the access token in local storage or context
       localStorage.setItem('access_token', authResponse.data.access_token);
       await login(formData.email, formData.password);
 
-      // Redirect to the appropriate dashboard based on user type
       if (userResponse.data.user_type === 'patient') {
         navigate('/doctors');
       } else if (userResponse.data.user_type === 'doctor') {
         navigate('/appointments');
       }
-      // navigate('/');
     } catch (err) {
       setError(err.response?.data?.error_description || 'Login failed. Please try again.');
     } finally {
@@ -143,10 +137,10 @@ const Login = () => {
                   edge="end"
                   sx={{ color: 'text.secondary' }}
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility/>}
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
-            )
+            ),
           }}
         />
 
@@ -163,7 +157,7 @@ const Login = () => {
         </Button>
 
         <Grid container justifyContent="flex-end">
-          <Grid item>
+          <Grid>
             <MuiLink component={Link} to="/signup" variant="body2">
               Don't have an account? Sign Up
             </MuiLink>
@@ -171,12 +165,12 @@ const Login = () => {
         </Grid>
 
         <Grid container justifyContent="space-between" sx={{ mt: 2 }}>
-          <Grid item>
+          <Grid>
             <MuiLink component={Link} to="/forgot-password" variant="body2">
               Forgot password?
             </MuiLink>
           </Grid>
-          <Grid item>
+          <Grid>
             <MuiLink component={Link} to="/help" variant="body2">
               Need help?
             </MuiLink>

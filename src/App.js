@@ -10,6 +10,8 @@ import ProfileEdit from './components/ProfileEdit';
 import ProtectedRoute from './components/ProtectedRoute';
 import Signup from './components/Signup';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const theme = createTheme();
 
@@ -18,32 +20,28 @@ function App() {
     <ThemeProvider theme={theme}>
       <ErrorBoundary>
         <AuthProvider>
-          <Router>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-
-              {/* Protected routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<HomeRedirect />} />
-                <Route path="/appointments" element={<Appointments />} />
-                <Route path="/doctors" element={<DoctorList />} /> {/* For patients */}
-                <Route path="/doctor-availability" element={<DoctorAvailability />} /> {/* For doctors */}
-                <Route path="/profile" element={<ProfileEdit />} /> {/* For all */}
-              </Route>
-
-              {/* Catch-all route */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Router>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Router>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/" element={<HomeRedirect />} />
+                  <Route path="/appointments" element={<Appointments />} />
+                  <Route path="/doctors" element={<DoctorList />} />
+                  <Route path="/doctor-availability" element={<DoctorAvailability />} />
+                  <Route path="/profile" element={<ProfileEdit />} />
+                </Route>
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Router>
+          </LocalizationProvider>
         </AuthProvider>
       </ErrorBoundary>
     </ThemeProvider>
   );
 }
 
-// Helper component for home redirection
 const HomeRedirect = () => {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
@@ -52,6 +50,5 @@ const HomeRedirect = () => {
   ) : (
     <Navigate to="/appointments" replace />
   );
-};
-
+}
 export default App;
