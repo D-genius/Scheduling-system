@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import api from '../api';
+import Header from './Header';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { Button, Box, Alert, Stack, Typography, CircularProgress } from '@mui/material';
+import Divider from '@mui/material/Divider';
 
 const DoctorAvailability = () => {
   const { user } = useAuth();
@@ -16,7 +18,8 @@ const DoctorAvailability = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user || !user.doctor?.id) {
+    
+    if (!user.doctor || !user.doctor?.id) {
       setError('You must be logged in as a doctor to set availability');
       return;
     }
@@ -52,6 +55,12 @@ const DoctorAvailability = () => {
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
+      <div className='header'>
+        <Header />
+        <br />
+        <Divider />
+      </div>
+
       <Typography variant="h4" gutterBottom>
         Set Doctor Availability
       </Typography>

@@ -23,12 +23,31 @@ api.interceptors.request.use(config => {
 // Response interceptor for error handling
 api.interceptors.response.use(
   response => response,
-  error => {
+  async error => {
+    const originalRequest = error.config;
     const { status } = error.response;
     
-    if (status === 401) {
+    if (status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      // localStorage.removeItem('access_token');
+      // window.location = '/login';
+    try {
+      const refreshToken = localStorage.getItem('refresh_token');
+      const response = await api.post('/o/token/', {
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET
+      });
+      
+      localStorage.setItem('access_token', response.data.access_token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+      return api(originalRequest);
+    } catch (refreshError) {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       window.location = '/login';
+      }
     }
     
     const errorMessage = error.response?.data?.detail || 

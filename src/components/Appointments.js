@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import api from '../api';
+import Header from './Header';
 import { useAuth } from '../auth/AuthContext';
 import { Button, CircularProgress, Alert, Box, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import { DateTimePicker } from '@mui/x-date-pickers';
 
 const Appointments = () => {
@@ -36,9 +38,12 @@ const Appointments = () => {
       }
     };
 
-    if (user) {
-      fetchAppointments();
-    }
+    // if (user) {
+    //   fetchAppointments();
+    // }
+
+    fetchAppointments();
+
   }, [user]);
 
   const bookAppointment = async (doctorId, scheduleDate, followDate) => {
@@ -106,6 +111,12 @@ const Appointments = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+      <div className='header'>
+        <Header />
+        <br />
+        <Divider sx={{ mb: 5 }} />
+
+      </div>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h4">
           Book Appointments
@@ -128,7 +139,7 @@ const Appointments = () => {
         <CircularProgress />
       ) : (
         <div className="appointments-list">
-          {user?.user_type === 'doctor' && (
+          {/* {user?.user_type === 'doctor' && ( )}; */}
             <Button
               variant="contained"
               color="secondary"
@@ -137,7 +148,6 @@ const Appointments = () => {
             >
               Create Doctor Availability
             </Button>
-          )}
           {appointments.length === 0 ? (
             <Typography>No appointments found.</Typography>
           ) : (

@@ -2,7 +2,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { Box, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
+import { Box, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert, Typography } from '@mui/material';
+import LocalHospital from '@mui/icons-material/LocalHospital';
+import { styled } from '@mui/system';
+
+const StyledContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  maxWidth: 400,
+  margin: 'auto',
+  marginTop: theme.spacing(8),
+  padding: theme.spacing(3),
+  boxShadow: theme.shadows[3],
+  borderRadius: theme.shape.borderRadius,
+}));
 
 const Signup = () => {
   const [userType, setUserType] = useState('patient');
@@ -53,6 +67,12 @@ const Signup = () => {
   };
 
   return (
+  <StyledContainer>
+          <LocalHospital color="primary" sx={{ fontSize: 40, mb: 2 }} />
+          <Typography component="h1" variant="h5" gutterBottom>
+            Sign up to Healthcare System
+          </Typography>
+
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
       <FormControl fullWidth margin="normal">
         <InputLabel>Account Type</InputLabel>
@@ -112,6 +132,7 @@ const Signup = () => {
         Sign Up
       </Button>
     </Box>
+  </StyledContainer>
   );
 };
 

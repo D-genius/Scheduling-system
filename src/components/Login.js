@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
@@ -15,7 +14,8 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LocalHospital from '@mui/icons-material/LocalHospital';
 import { styled } from '@mui/system';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -90,7 +90,7 @@ const Login = () => {
 
   return (
     <StyledContainer>
-      <LockOutlinedIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
+      <LocalHospital color="primary" sx={{ fontSize: 40, mb: 2 }} />
       <Typography component="h1" variant="h5" gutterBottom>
         Sign in to Healthcare System
       </Typography>
