@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 
 const DoctorList = () => {
+  
   const { user } = useAuth();
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
