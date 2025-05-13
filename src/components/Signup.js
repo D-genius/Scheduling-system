@@ -1,8 +1,8 @@
 // src/components/Signup.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
-import { Box, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert, Typography } from '@mui/material';
+import { Box, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert, Typography, Grid, Link as MuiLink } from '@mui/material';
 import LocalHospital from '@mui/icons-material/LocalHospital';
 import { styled } from '@mui/system';
 
@@ -131,6 +131,13 @@ const Signup = () => {
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
         Sign Up
       </Button>
+      <Grid container justifyContent="flex-end">
+        <Grid>
+          <MuiLink component={Link} to="/login" variant="body2">
+            Have an account? Sign In
+          </MuiLink>
+        </Grid>
+      </Grid>
     </Box>
   </StyledContainer>
   );

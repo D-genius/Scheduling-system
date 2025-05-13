@@ -16,6 +16,11 @@ api.interceptors.request.use(config => {
   }
   if (config.url?.includes('/o/token/')) {
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    
+    config.auth = {
+      username: process.env.REACT_APP_CLIENT_ID,
+      password: process.env.REACT_APP_CLIENT_SECRET,
+    };
   }
   return config;
 });
