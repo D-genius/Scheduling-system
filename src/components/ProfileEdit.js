@@ -45,9 +45,11 @@ const ProfileEdit = () => {
     try {
       const endpoint = user.user_type === 'doctor' ? `/doctors/${formData.id}/` : `/patients/${formData.id}/`;
       await api.patch(endpoint, {
-        phone : formData.phone,
-        ...(user.user_type === 'doctor' && { specialization: formData.specialization ,hospital: formData.hospital  }),
-        ...(user.user_type === 'patient' && { insurance_number: formData.insurance_number, address: formData.address  })
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        ...(user.user_type === 'doctor' && {phone : formData.phone, specialization: formData.specialization, hospital: formData.hospital }),
+        ...(user.user_type === 'patient' && {phone : formData.phone, insurance_number: formData.insurance_number, id_number: formData.id_number, address: formData.address })
       });
       setSuccess('Profile updated successfully');
     } catch (err) {
@@ -68,7 +70,21 @@ const ProfileEdit = () => {
           <Typography component="h1" variant="h5" gutterBottom>
             Edit User Profile
           </Typography>
-    {/* <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>   */}
+      {/* <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>   */}
+      <TextField fullWidth margin="normal" label="First Name" multiline
+          value={formData.first_name || ''}
+          onChange={(e) => setFormData({...formData, first_name: e.target.value})}
+        />
+
+      <TextField fullWidth margin="normal" label="Last Name" multiline
+          value={formData.last_name || ''}
+          onChange={(e) => setFormData({...formData, last_name: e.target.value})}
+        />
+      <TextField fullWidth margin="normal" label="Email" multiline
+        value={formData.email || ''}
+        onChange={(e) => setFormData({...formData, email: e.target.value})}
+      />
+
       <TextField fullWidth margin="normal" label="Contact Details" multiline
         value={formData.phone || ''}
         onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -92,6 +108,13 @@ const ProfileEdit = () => {
         <TextField fullWidth margin="normal" label="Insurance Number"
           value={formData.insurance_number || ''}
           onChange={(e) => setFormData({...formData, insurance_number: e.target.value})}
+        />
+      )}
+
+      {user.user_type === 'patient' && (
+        <TextField fullWidth margin="normal" label="ID Number"
+          value={formData.id_number || ''}
+          onChange={(e) => setFormData({...formData, id_number: e.target.value})}
         />
       )}
 

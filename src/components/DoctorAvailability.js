@@ -18,11 +18,7 @@ const DoctorAvailability = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!user.doctor || !user.doctor?.id) {
-      setError('You must be logged in as a doctor to set availability');
-      return;
-    }
+  
     if (!availability.start_datetime || !availability.end_datetime) {
       setError('Please select both start and end times');
       return;

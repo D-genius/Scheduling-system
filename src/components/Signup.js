@@ -65,8 +65,8 @@ const Signup = () => {
           password: process.env.REACT_APP_CLIENT_SECRET,
         }
       });
-      navigate('/login');
       setSuccess(`${userType} added successfully`);
+      navigate('/login');
     } catch (err) {
       setError(err.message);
     }
