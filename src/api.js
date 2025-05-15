@@ -11,16 +11,24 @@ const api = axios.create({
 // Request interceptor for adding auth token
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('access_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  if (config.url?.includes('/o/token/')) {
+ 
+  if (config.url?.includes('/signup/') || config.url?.includes('/o/token/')) {
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     
     config.auth = {
       username: process.env.REACT_APP_CLIENT_ID,
       password: process.env.REACT_APP_CLIENT_SECRET,
     };
+  }
+  
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+    if (config.url?.includes('/patients/') ||
+        config.url?.includes('/doctors/') ||
+        config.url?.includes('/availability/') ||
+        config.url?.includes('/appointments/')) {
+      config.headers['Content-Type'] = 'application/json';
+    }
   }
   return config;
 });

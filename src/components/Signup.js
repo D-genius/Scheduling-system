@@ -33,6 +33,7 @@ const Signup = () => {
     address: ''
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -58,9 +59,14 @@ const Signup = () => {
           id_number: formData.id_number,
           address: formData.address
 
-        })
+        }),
+        auth: {
+          username: process.env.REACT_APP_CLIENT_ID,
+          password: process.env.REACT_APP_CLIENT_SECRET,
+        }
       });
       navigate('/login');
+      setSuccess(`${userType} added successfully`);
     } catch (err) {
       setError(err.message);
     }
@@ -126,6 +132,7 @@ const Signup = () => {
       <TextField fullWidth margin="normal" label="Contact Details" required multiline
         value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
 
+      {success && <Alert severity="success" sx={{ mt: 2 }}>{success}</Alert>}
       {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
 
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
