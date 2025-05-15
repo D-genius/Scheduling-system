@@ -45,11 +45,11 @@ const ProfileEdit = () => {
     try {
       const endpoint = user.user_type === 'doctor' ? `/doctors/${formData.id}/` : `/patients/${formData.id}/`;
       await api.patch(endpoint, {
-        email: formData.email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        ...(user.user_type === 'doctor' && {phone : formData.phone, specialization: formData.specialization, hospital: formData.hospital }),
-        ...(user.user_type === 'patient' && {phone : formData.phone, insurance_number: formData.insurance_number, id_number: formData.id_number, address: formData.address })
+        email: formData.user.email,
+        first_name: formData.user.first_name,
+        last_name: formData.user.last_name,
+        ...(user.user_type === 'doctor' && {phone : formData.user.phone, specialization: formData.user.specialization, hospital: formData.user.hospital }),
+        ...(user.user_type === 'patient' && {phone : formData.user.phone, insurance_number: formData.user.insurance_number, id_number: formData.user.id_number, address: formData.user.address })
       });
       setSuccess('Profile updated successfully');
     } catch (err) {

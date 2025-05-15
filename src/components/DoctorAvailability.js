@@ -27,11 +27,13 @@ const DoctorAvailability = () => {
       setLoading(true);
       const accessToken = localStorage.getItem('access_token');
       if (!accessToken) throw new Error('No access token found. Please log in.');
-      await api.post(
-        '/availability/',
+      
+      await api.post('/availability/',
         {
           doctor: user.doctor.id,
-          ...availability,
+          start_datetime: availability.start_datetime,
+          end_datetime: availability.end_datetime,
+          status: 'available',
         },
         {
           headers: {
