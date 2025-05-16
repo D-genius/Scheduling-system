@@ -28,11 +28,18 @@ const DoctorAvailability = () => {
       const accessToken = localStorage.getItem('access_token');
       if (!accessToken) throw new Error('No access token found. Please log in.');
       
+    // Use ISO string format for datetime and validate time order
+    const start = new Date(availability.start_datetime).toISOString();
+    const end = new Date(availability.end_datetime).toISOString();
+    
+    if (start >= end) {
+      throw new Error('End time must be after start time');
+    }
       await api.post('/availability/',
         {
-          doctor: user.doctor.id,
-          start_datetime: availability.start_datetime,
-          end_datetime: availability.end_datetime,
+          doctor: user.doctor_id,
+          start_datetime: start,
+          end_datetime: end,
           status: 'available',
         },
         {
