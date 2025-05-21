@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import api from '../api';
 import Header from './Header';
@@ -15,10 +15,10 @@ const DoctorAvailability = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!availability.start_datetime || !availability.end_datetime) {
       setError('Please select both start and end times');
       return;
@@ -27,7 +27,21 @@ const DoctorAvailability = () => {
       setLoading(true);
       const accessToken = localStorage.getItem('access_token');
       if (!accessToken) throw new Error('No access token found. Please log in.');
-      
+
+      const response = await api.get(`/doctors/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // console.log('user',typeof(response.data?.id));
+
+      const doctorId = parseInt(response.data.id);
+    
+    // if (isNaN(doctorId)) {
+    //   throw new Error('Invalid doctor ID');
+    // }
+    
     // Use ISO string format for datetime and validate time order
     const start = new Date(availability.start_datetime).toISOString();
     const end = new Date(availability.end_datetime).toISOString();
@@ -35,24 +49,28 @@ const DoctorAvailability = () => {
     if (start >= end) {
       throw new Error('End time must be after start time');
     }
-      await api.post('/availability/',
+      await api.post(`/availability/`,
         {
-          doctor: user.doctor_id,
+          doctor: doctorId,
           start_datetime: start,
           end_datetime: end,
-          status: 'available',
+          is_available: true,
+          // status: 'available',
         },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            'content-type': 'application/json',
           },
         }
       );
       setSuccess('Availability added successfully');
       setError('');
       setAvailability({ start_datetime: null, end_datetime: null });
+      console.log('Availability added:', user.doctor_id, start, end); // Debug API response
+
     } catch (err) {
-      setError(err.message || 'Failed to add availability');
+      setError(err.message || 'Failed to add availability' || err.response?.data?.detail);
     } finally {
       setLoading(false);
     }
